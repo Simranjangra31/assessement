@@ -6,7 +6,7 @@ app = Flask(__name__)
 # Home route
 @app.route('/')
 def home():
-    return jsonify({"message": "Welcome to my Flask app running on port 5001!, Try to solve your equation"})
+    return jsonify({"message": "Welcome to my Flask app running on port 5001!"})
 
 # Example route for addition
 @app.route('/add', methods=['GET'])
