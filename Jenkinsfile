@@ -15,16 +15,16 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
+                sh 'docker build -t flask-app:latest .'
             }
         }
 
         stage('Run Container') {
             steps {
                 sh '''
-                    docker stop ${IMAGE_NAME} || true
-                    docker rm ${IMAGE_NAME} || true
-                    docker run -d --name ${IMAGE_NAME} -p 5001:5001 ${IMAGE_NAME}:${IMAGE_TAG}
+                    docker stop flask-app || true
+                    docker rm flask-app || true
+                    docker run -d --name flask-app -p 5001:5001 flask-app:latest
                 '''
             }
         }
