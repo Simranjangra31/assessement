@@ -1,30 +1,29 @@
 pipeline {
     agent any
 
-    environment {
-        IMAGE_NAME = "flask-app"
-        IMAGE_TAG = "latest"
+    triggers {
+        pollSCM('H/2 * * * *')  // every 2 mins
     }
 
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                git branch: 'main', url: 'https://github.com/Simranjangra31/assessement.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t flask-app:latest .'
+                bat 'docker build -t flask-app:latest .'
             }
         }
 
         stage('Run Container') {
             steps {
-                sh '''
-                    docker stop flask-app || true
-                    docker rm flask-app || true
-                    docker run -d --name flask-app -p 5001:5001 flask-app:latest
+                bat '''
+                docker stop flask-container
+                docker rm flask-container
+                docker run -d -p 5001:5001 --name flask-container flask-app:latest
                 '''
             }
         }
@@ -32,7 +31,7 @@ pipeline {
 
     post {
         success {
-            echo "✅ Flask app is running successfully on port 5001!"
+            echo "✅ Build and Deployment Successful!"
         }
         failure {
             echo "❌ Build failed. Please check the logs."
